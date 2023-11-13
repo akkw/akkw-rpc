@@ -12,21 +12,24 @@ import java.util.Map;
 
 public abstract class AbstractEncoderCoder extends MessageToByteEncoder<Command> {
 
-    private final Map<CommandEnum, AbstractEncoderCoder> coderMap;
-
-    public AbstractEncoderCoder(Map<CommandEnum, AbstractEncoderCoder> coderMap) {
-        this.coderMap = coderMap;
-    }
-
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Command command, ByteBuf byteBuf) throws Exception {
-        Header header = command.header();
-        AbstractEncoderCoder abstractEncoderCoder = coderMap.get(header.getCommand());
-        encode(header, byteBuf);
-        abstractEncoderCoder.encode(command.payload(), byteBuf);
+        try {
+            Header header = command.header();
+            Payload payload = command.payload();
+            byte[] hEncoder = header.encoder();
+            if (hEncoder != null) {
+                byteBuf.writeBytes(hEncoder);
+            }
+            byte[] encoder = payload.encoder();
+            if (encoder != null) {
+                byteBuf.writeBytes(encoder);
+            }
+        } catch (Exception e) {
+            // TODO close channel
+        }
     }
     private void encode(Header header, ByteBuf byteBuf) {
 
     }
-    protected abstract void encode(Payload payload, ByteBuf byteBuf);
 }

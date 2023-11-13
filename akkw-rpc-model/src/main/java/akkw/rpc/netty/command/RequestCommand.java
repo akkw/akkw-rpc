@@ -18,5 +18,14 @@ public class RequestCommand implements Command {
 
     public static class RequestCommandPayload implements Payload {
 
+        @Override
+        public byte[] encoder() {
+            return new byte[0];
+        }
+
+        @Override
+        public Payload decoder(byte[] in) {
+            return null;
+        }
     }
 }

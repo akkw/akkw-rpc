@@ -7,4 +7,14 @@ public class Header {
     public CommandEnum getCommand() {
         return command;
     }
+
+
+    public byte[] encoder() {
+        return null;
+    }
+
+
+    public void decoder(byte[] in) {
+
+    }
 }

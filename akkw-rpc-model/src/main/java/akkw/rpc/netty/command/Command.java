@@ -5,4 +5,8 @@ public interface Command {
     Header header();
 
     Payload payload();
+
+
+
+    default
 }
